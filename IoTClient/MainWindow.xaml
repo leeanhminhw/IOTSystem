@@ -1,0 +1,24 @@
+<Window x:Class="IoTClient.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="IoT Monitor" Height="600" Width="900">
+<Grid Margin="20"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+<TextBlock Grid.Row="0" Text="IoT Humidity Monitor" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+<Border Grid.Row="1" Background="#F0F0F0" Padding="15" Margin="0,0,0,20"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions>
+<StackPanel Grid.Column="0"><TextBlock Text="Total" FontWeight="Bold"/><TextBlock x:Name="TxtTotalRecords" Text="0" FontSize="20"/></StackPanel>
+<StackPanel Grid.Column="1"><TextBlock Text="Average" FontWeight="Bold"/><TextBlock x:Name="TxtAverage" Text="0%" FontSize="20"/></StackPanel>
+<StackPanel Grid.Column="2"><TextBlock Text="Min/Max" FontWeight="Bold"/><TextBlock x:Name="TxtMinMax" Text="0/0" FontSize="20"/></StackPanel>
+<StackPanel Grid.Column="3"><TextBlock Text="Latest" FontWeight="Bold"/><TextBlock x:Name="TxtLatest" Text="0%" FontSize="20"/></StackPanel>
+</Grid></Border>
+<DataGrid Grid.Row="2" x:Name="DataGridHumidity" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,0,20">
+<DataGrid.Columns>
+<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+<DataGridTextColumn Header="Sensor" Binding="{Binding SensorId}" Width="120"/>
+<DataGridTextColumn Header="Humidity (%)" Binding="{Binding HumidityValue, StringFormat=F2}" Width="120"/>
+<DataGridTextColumn Header="Local Time" Width="*">
+    <DataGridTextColumn.Binding>
+        <Binding Path="Timestamp" StringFormat="yyyy-MM-dd HH:mm:ss"/>
+    </DataGridTextColumn.Binding>
+</DataGridTextColumn>
+</DataGrid.Columns></DataGrid>
+<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+<Button x:Name="BtnRefresh" Content="Refresh" Click="BtnRefresh_Click" Width="120" Height="35" Margin="5" Background="#2196F3" Foreground="White"/>
+<Button x:Name="BtnAutoRefresh" Content="Auto OFF" Click="BtnAutoRefresh_Click" Width="120" Height="35" Margin="5" Background="#4CAF50" Foreground="White"/>
+<TextBlock x:Name="TxtStatus" Text="Ready" VerticalAlignment="Center" Margin="10,0,0,0"/></StackPanel></Grid></Window>

@@ -1,0 +1,67 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4.1.4-management
+    container_name: iot_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - iot_network
+
+  api:
+    build:
+      context: .
+      dockerfile: IoTWebAPI/Dockerfile
+    container_name: iot_webapi
+    ports:
+      - "5000:8080"
+    environment:
+      IOT_DB_PATH: /app/data/iot_data.db
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - iot_network
+    restart: unless-stopped
+
+  server:
+    build:
+      context: .
+      dockerfile: IoTServer/Dockerfile
+    container_name: iot_server
+    environment:
+      RabbitMq__HostName: rabbitmq
+      API_BASE_URL: http://api:8080  # ⭐ Point to API container
+    depends_on:
+      - api  # ⭐ Wait for API first
+    networks:
+      - iot_network
+    restart: unless-stopped
+
+  sensor:
+    build:
+      context: .
+      dockerfile: IoTSensor/Dockerfile
+    container_name: iot_sensor
+    environment:
+      RabbitMq__HostName: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - iot_network
+    restart: unless-stopped
+
+networks:
+  iot_network:
+    driver: bridge
