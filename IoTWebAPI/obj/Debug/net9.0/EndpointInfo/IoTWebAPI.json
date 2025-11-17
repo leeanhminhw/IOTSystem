@@ -1,0 +1,143 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "IoTWebAPI",
+    "version": "1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "IoTWebAPI"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/humidity": {
+      "post": {
+        "tags": [
+          "IoTWebAPI"
+        ],
+        "description": "Save humidity reading from IoT Server",
+        "operationId": "CreateHumidityReading",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HumidityMessage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "IoTWebAPI"
+        ],
+        "operationId": "GetAllHumidity",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/humidity/latest": {
+      "get": {
+        "tags": [
+          "IoTWebAPI"
+        ],
+        "operationId": "GetLatestHumidity",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/humidity/stats": {
+      "get": {
+        "tags": [
+          "IoTWebAPI"
+        ],
+        "operationId": "GetStats",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HumidityMessage": {
+        "type": "object",
+        "properties": {
+          "humidityValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "sensorId": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Void": {
+        "type": "object",
+        "additionalProperties": false
+      }
+    }
+  }
+}
